@@ -26,9 +26,17 @@ namespace Script
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            /*
             if (other.gameObject.layer != _projectilLayer) return;
             GameEvents.ProjectileHitTarget();
             Destroy(other.gameObject);
+            */
+            if (other && other.gameObject && other) return;
+            GameEvents.onProjectileHitTarget?.Invoke();
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+            Console.WriteLine("Projectile hit the target!");
+
         }
     }
 }

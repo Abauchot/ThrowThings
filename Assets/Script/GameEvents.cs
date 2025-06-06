@@ -4,11 +4,11 @@ namespace Script
 {
     public static class GameEvents
     {
-        public static Action OnProjectileHitTarget;
+        public static Action onProjectileHitTarget;
 
         public static void ProjectileHitTarget()
         {
-            OnProjectileHitTarget?.Invoke();
+            onProjectileHitTarget?.Invoke();
         }
     }
 }

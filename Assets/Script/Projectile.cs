@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Script
@@ -7,7 +6,8 @@ namespace Script
     {
         private Rigidbody2D _rb;
         private Vector2 _startPos;
-        private  bool _isLaunched = false;
+        private bool _isLaunched;
+        private GameManager _gameManager;
 
 
         public float launchForce = 10f;
@@ -16,8 +16,19 @@ namespace Script
         {
             _rb = GetComponent<Rigidbody2D>();
             _startPos = transform.position;
+            _gameManager = FindFirstObjectByType<GameManager>();
 
         }
+       
+        private void Update()
+        {
+            if (!_isLaunched || !_gameManager) return;
+
+            if (_gameManager.gameArea.Contains(transform.position)) return;
+            Destroy(gameObject);
+            _gameManager.RespawnProjectile();
+        }
+
         
         /*
          * This method is called when the mouse button is pressed down.
