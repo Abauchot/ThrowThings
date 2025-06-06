@@ -8,7 +8,9 @@ namespace Script
     public class GameManager : MonoBehaviour
     {
         public int score = 0;
+        public int lives = 3;
         public TextMeshProUGUI scoreText;
+        public TextMeshProUGUI livesText;
         public GameObject projectilePrefab;
         public Transform projectileSpawn;
         public GameObject targetPrefab;
@@ -20,16 +22,21 @@ namespace Script
         private void OnEnable()
         {
             GameEvents.onProjectileHitTarget += AddScore;
+            GameEvents.onProjectileMissedTarget += LoseLife;
+            GameEvents.onProjectileOutOfBounds += LoseLife;
         }
 
         private void OnDisable()
         {
             GameEvents.onProjectileHitTarget -= AddScore;
+            GameEvents.onProjectileMissedTarget -= LoseLife;
+            GameEvents.onProjectileOutOfBounds -= LoseLife;
         }
 
         private void Start()
         {
             UpdateScoreUI();
+            UpdateLivesUI();
             RespawnProjectile();
             RespawnTarget();
         }
@@ -41,11 +48,29 @@ namespace Script
             RespawnProjectile();
             RespawnTarget();
         }
+        
+        private void LoseLife()
+        {
+            lives--;
+            UpdateLivesUI();
+            if (lives <= 0)
+            {
+                IsGameOver();
+                Debug.Log("Game Over!");
+            }
+            else
+            {
+                RespawnProjectile();
+                RespawnTarget();
+            }
+        }
 
         public void RestartGame()
         {
             score = 0;
+            lives = 3;
             UpdateScoreUI();
+            UpdateLivesUI();
             RespawnProjectile();
             RespawnTarget();
         }
@@ -54,6 +79,14 @@ namespace Script
         {
             if (scoreText)
                 scoreText.text = "Score: " + score;
+        }
+
+        private void UpdateLivesUI()
+        {
+            if (livesText)
+            {
+                livesText.text = "Lives: " + new string('❤', lives);
+            }
         }
         
         /*
@@ -100,6 +133,12 @@ namespace Script
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(gameArea.center, gameArea.size);
+        }
+
+        public bool IsGameOver()
+        {
+            return lives <= 0;
+        
         }
 
         
