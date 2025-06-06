@@ -8,13 +8,11 @@ namespace Script
         public float speed = 2f;
         public float amplitude = 2f;
         private Vector3 _startPos;
-        private int _projectilLayer;
        
         
         private void Start()
         {
             _startPos = transform.position;
-            _projectilLayer = LayerMask.NameToLayer("Projectile");
         }
 
        
@@ -27,11 +25,12 @@ namespace Script
         private void OnTriggerEnter2D(Collider2D other)
         {
             /*
-            if (other.gameObject.layer != _projectilLayer) return;
-            GameEvents.ProjectileHitTarget();
-            Destroy(other.gameObject);
+             * This method is called when a collider enters the trigger collider attached to the target.
+             * It checks if the other collider is a projectile, and if so, it invokes the onProjectileHitTarget event,
+             * destroys the projectile, and destroys the target itself.
+             * If the other collider is not a projectile, it does nothing.
             */
-            if (other && other.gameObject && other) return;
+            if (other && other.gameObject && other && other.CompareTag("Projectile")) return;
             GameEvents.onProjectileHitTarget?.Invoke();
             Destroy(other.gameObject);
             Destroy(gameObject);

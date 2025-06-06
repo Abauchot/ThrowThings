@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Script
@@ -20,13 +21,26 @@ namespace Script
 
         }
        
+// À ajouter dans votre classe Projectile
         private void Update()
         {
-            if (!_isLaunched || !_gameManager) return;
-
-            if (_gameManager.gameArea.Contains(transform.position)) return;
-            Destroy(gameObject);
-            _gameManager.RespawnProjectile();
+            // Récupérer les limites de jeu depuis le GameManager
+            GameManager gameManager = FindFirstObjectByType<GameManager>();
+            if (gameManager)
+            {
+                Rect gameArea = gameManager.gameArea;
+        
+                // Vérifier si le projectile est en dehors des limites
+                if (transform.position.x < gameArea.xMin || transform.position.x > gameArea.xMax ||
+                    transform.position.y < gameArea.yMin || transform.position.y > gameArea.yMax)
+                {
+                    Debug.Log("Projectile out of bounds!");
+                    // Déclencher l'événement
+                    GameEvents.onProjectileOutOfBounds?.Invoke();
+                    // Détruire le projectile
+                    Destroy(gameObject);
+                }
+            }
         }
 
         
@@ -58,12 +72,20 @@ namespace Script
             _isLaunched = true;
             Invoke(nameof(DestroyIfMissed),3f);
         }
-        
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.CompareTag("Target")) return;
+            GameEvents.onProjectileHitTarget.Invoke();
+            Destroy(other.gameObject);
+        }
+
         /*
          * This method destroys the projectile if it has not hit a target after 3 seconds.
          */
         private void DestroyIfMissed()
         {
+            
 
             Destroy(gameObject);
         }

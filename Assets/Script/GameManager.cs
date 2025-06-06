@@ -85,7 +85,7 @@ namespace Script
         {
             if (livesText)
             {
-                livesText.text = "Lives: " + new string('❤', lives);
+                livesText.text = "Lives: " + new string('♥', lives);
             }
         }
         
@@ -129,16 +129,12 @@ namespace Script
             Instantiate(targetPrefab, spawnPos, Quaternion.identity);
         }
         
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(gameArea.center, gameArea.size);
-        }
-
         public bool IsGameOver()
         {
-            return lives <= 0;
-        
+            if (lives > 0) return false;
+            Time.timeScale = 0f;
+            return true;
+
         }
 
         
