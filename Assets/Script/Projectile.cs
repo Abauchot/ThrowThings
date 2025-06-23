@@ -20,26 +20,23 @@ namespace Script
             _gameManager = FindFirstObjectByType<GameManager>();
 
         }
-       
-// À ajouter dans votre classe Projectile
+        
         private void Update()
         {
             // Récupérer les limites de jeu depuis le GameManager
             GameManager gameManager = FindFirstObjectByType<GameManager>();
-            if (gameManager)
-            {
-                Rect gameArea = gameManager.gameArea;
+            if (!gameManager) return;
+            Rect gameArea = gameManager.gameArea;
         
-                // Vérifier si le projectile est en dehors des limites
-                if (transform.position.x < gameArea.xMin || transform.position.x > gameArea.xMax ||
-                    transform.position.y < gameArea.yMin || transform.position.y > gameArea.yMax)
-                {
-                    Debug.Log("Projectile out of bounds!");
-                    // Déclencher l'événement
-                    GameEvents.onProjectileOutOfBounds?.Invoke();
-                    // Détruire le projectile
-                    Destroy(gameObject);
-                }
+            // Vérifier si le projectile est en dehors des limites
+            if (transform.position.x < gameArea.xMin || transform.position.x > gameArea.xMax ||
+                transform.position.y < gameArea.yMin || transform.position.y > gameArea.yMax)
+            {
+                Debug.Log("Projectile out of bounds!");
+                // Déclencher l'événement
+                GameEvents.onProjectileOutOfBounds?.Invoke();
+                // Détruire le projectile
+                Destroy(gameObject);
             }
         }
 
@@ -85,8 +82,6 @@ namespace Script
          */
         private void DestroyIfMissed()
         {
-            
-
             Destroy(gameObject);
         }
         
