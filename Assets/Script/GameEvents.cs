@@ -22,5 +22,7 @@ namespace Script
         {
             onProjectileOutOfBounds?.Invoke();
         }
+        
+        
     }
 }

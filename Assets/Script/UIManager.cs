@@ -6,30 +6,34 @@ namespace Script
 {
     public class UIManager: MonoBehaviour
     {
-        private Button _restartButton;
+        [SerializeField] private Button restartButton;
         private GameManager _gameManager;
 
 
         private void Start()
         {
-            if (_restartButton)
+            if (restartButton)
             {
-                _restartButton.gameObject.SetActive(false);
+                restartButton.gameObject.SetActive(false);
             }
             _gameManager = FindFirstObjectByType<GameManager>();
         }
 
         private void Update()
         {
-            if(_gameManager && _gameManager.IsGameOver() && !_restartButton.gameObject.activeSelf)
+            if (_gameManager && _gameManager.IsGameOver() && restartButton && !restartButton.gameObject.activeSelf)
             {
-              _restartButton.gameObject.SetActive(true);
+                restartButton.gameObject.SetActive(true);
             }
         }
 
         public void OnRestartButton()
         {
-            FindFirstObjectByType <GameManager>().RestartGame();
+            restartButton.gameObject.SetActive(false);
+            _gameManager.RestartGame();
+            
         }
+        
+        
     }
 }

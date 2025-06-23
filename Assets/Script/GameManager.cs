@@ -73,6 +73,7 @@ namespace Script
             UpdateLivesUI();
             RespawnProjectile();
             RespawnTarget();
+            Time.timeScale = 1f;
         }
         
         private void UpdateScoreUI()
@@ -96,7 +97,7 @@ namespace Script
          *  It checks if the projectilePrefab and projectileSpawn are set before instantiating.
          */
         
-        public void RespawnProjectile()
+        private void RespawnProjectile()
         {
             foreach (var oldProjectile in FindObjectsByType<Projectile>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)) 
             {
